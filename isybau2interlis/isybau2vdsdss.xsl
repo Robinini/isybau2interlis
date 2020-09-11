@@ -27,6 +27,8 @@
 </TRANSFER>
 </xsl:template>
 
+<!-- Hide 'Kennung' tag -->
+<xsl:template match="ib:Kennung"/>
 
 <!-- Knoten -->
 <xsl:template match="ib:AbwassertechnischeAnlage[ib:Objektart=2]">
@@ -63,11 +65,6 @@
             </xsl:choose>
         </Status>
 
-        <!-- ToDo Risk of multiple points -->
-        <Deckelkote>
-            <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='DMP']/ib:Punkthoehe"/>
-        </Deckelkote>
-
         <!-- ToDo only <KnotenTyp>0 : Schacht and Anschlusspunkt 1 is covered. Bauwerk 2 neeed to be covered -->
         <Funktion>
             <xsl:choose>
@@ -86,21 +83,40 @@
                 <xsl:when test="ib:Knoten/ib:KnotenTyp=0 and ib:Knoten/ib:Schacht/ib:SchachtFunktion=12">Messstelle</xsl:when>
                 <xsl:otherwise>andere</xsl:otherwise>
             </xsl:choose>
-
         </Funktion>
+
+        <!-- ToDO How can this be established? -->
         <FunktionHierarchisch/>
-        <Lage>
-            <COORD>
-                <C1>700007.72</C1>
-                <C2>100177.54</C2>
-            </COORD>
-        </Lage>
-        <Lagegenauigkeit>plusminus_10cm</Lagegenauigkeit>
 
         <!-- ToDo Likely not all points identified. Risk of multiple points -->
         <Sohlenkote>
             <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Punkthoehe"/>
         </Sohlenkote>
+        <Lage>
+            <COORD>
+                <C1><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Rechtswert"/></C1>
+                <C2><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Hochwert"/></C2>
+            </COORD>
+        </Lage>
+        <Deckelkote>
+            <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='DMP']/ib:Punkthoehe"/>
+        </Deckelkote>
+
+        <Lagegenauigkeit>
+            <xsl:choose>
+                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=0">plusminus_3cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=1">plusminus_50cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=2">groesser_50cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=3">plusminus_50cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=4">groesser_50cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=5">plusminus_10cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=6">plusminus_3cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=7">plusminus_10cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=8">plusminus_10cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=9">unbekannt</xsl:when>
+                <xsl:otherwise>unbekannt</xsl:otherwise>
+            </xsl:choose>
+        </Lagegenauigkeit>
 
         <Zugaenglichkeit>
             <xsl:choose>
@@ -113,7 +129,7 @@
 
 </xsl:template>
 
-    <!-- Leitungen -->
+<!-- Leitungen -->
 <xsl:template match="ib:AbwassertechnischeAnlage[ib:Objektart=1]">
     <VSADSSMINI_2015.VSADSSMini.Leitung TID="PAA_HL25">
         <xsl:attribute name="TID">
@@ -149,8 +165,25 @@
             </xsl:choose>
         </Status>
 
-        <FunktionHierarchisch>PAA.Hauptsammelkanal</FunktionHierarchisch>
-        <FunktionHydraulisch>Freispiegelleitung</FunktionHydraulisch>
+        <!-- ToDO How can this be established? -->
+        <FunktionHierarchisch/>
+
+        <FunktionHydraulisch>
+            <xsl:choose>
+                <xsl:when test="ib:Entwaesserungsart='KR'">Freispiegelleitung</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='KS'">Freispiegelleitung</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='KM'">Freispiegelleitung</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='KW'">Freispiegelleitung</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='DR'">Pumpendruckleitung</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='DS'">Pumpendruckleitung</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='DM'">Pumpendruckleitung</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GR'">Freispiegelleitung</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GS'">Freispiegelleitung</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GM'">Freispiegelleitung</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GW'">Freispiegelleitung</xsl:when>
+                <xsl:otherwise>andere</xsl:otherwise>
+            </xsl:choose>
+        </FunktionHydraulisch>
         <Hoehengenauigkeit_nach>unbekannt</Hoehengenauigkeit_nach>
         <Hoehengenauigkeit_von>unbekannt</Hoehengenauigkeit_von>
         <Kote_nach>593.602</Kote_nach>
@@ -160,12 +193,39 @@
         <Lichte_Breite>1200</Lichte_Breite>
         <Lichte_Hoehe>1200</Lichte_Hoehe>
         <Material>Asbestzement</Material>
-        <Nutzungsart_geplant>Mischabwasser</Nutzungsart_geplant>
-        <Nutzungsart_Ist>Mischabwasser</Nutzungsart_Ist>
-        <OBJ_ID_Abwasserbauwerk>PAA_HLBW25</OBJ_ID_Abwasserbauwerk>
-        <OBJ_ID_nachHaltungspunkt>PAA_HP27</OBJ_ID_nachHaltungspunkt>
-        <OBJ_ID_Rohrprofil>PROF1</OBJ_ID_Rohrprofil>
-        <OBJ_ID_vonHaltungspunkt>PAA_HP26</OBJ_ID_vonHaltungspunkt>
+        <Nutzungsart_geplant>
+            <xsl:choose>
+                <xsl:when test="ib:Entwaesserungsart='KR'">Regenabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='KS'">Schmutzabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='KM'">Mischabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='KW'">Bachwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='DR'">Regenabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='DS'">Schmutzabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='DM'">Mischabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GR'">Regenabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GS'">Schmutzabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GM'">Mischabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GW'">Bachwasser</xsl:when>
+                <xsl:otherwise>andere</xsl:otherwise>
+            </xsl:choose>
+        </Nutzungsart_geplant>
+        <Nutzungsart_Ist>
+            <xsl:choose>
+                <xsl:when test="ib:Entwaesserungsart='KR'">Regenabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='KS'">Schmutzabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='KM'">Mischabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='KW'">Bachwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='DR'">Regenabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='DS'">Schmutzabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='DM'">Mischabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GR'">Regenabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GS'">Schmutzabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GM'">Mischabwasser</xsl:when>
+                <xsl:when test="ib:Entwaesserungsart='GW'">Bachwasser</xsl:when>
+                <xsl:otherwise>andere</xsl:otherwise>
+            </xsl:choose>
+        </Nutzungsart_Ist>
+
         <Profiltyp>Kreisprofil</Profiltyp>
         <Verlauf>
             <POLYLINE>
@@ -191,10 +251,6 @@
                 </COORD>
             </POLYLINE>
         </Verlauf>
-
-                <WBW_Basisjahr>2010</WBW_Basisjahr>
-<WBW_Bauart>Feld</WBW_Bauart>
-<Wiederbeschaffungswert>148048</Wiederbeschaffungswert>
 
         <Knoten_nachRef REF="PAA_KN27"/>
         <Knoten_vonRef REF="PAA_KN26"/>
