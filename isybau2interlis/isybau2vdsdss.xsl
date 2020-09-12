@@ -102,6 +102,7 @@
             <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='DMP']/ib:Punkthoehe"/>
         </Deckelkote>
 
+        <!-- toDo Unsure if the accuracies are correctly converted -->
         <Lagegenauigkeit>
             <xsl:choose>
                 <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=0">plusminus_3cm</xsl:when>
