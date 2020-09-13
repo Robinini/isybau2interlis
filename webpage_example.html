@@ -18,28 +18,54 @@
     return xhttp.responseXML;
     }
 
-    function displayResult()
+    function translate(xml_source)
     {
-    xml = loadXMLDoc("cdcatalog.xml");
-    xsl = loadXMLDoc("cdcatalog.xsl");
+    xsl = loadXMLDoc("isybau2interlis/isybau2vdsdss.xsl");
     // code for IE
     if (window.ActiveXObject || xhttp.responseType == "msxml-document")
       {
-      ex = xml.transformNode(xsl);
-      document.getElementById("example").innerHTML = ex;
+      ex = xml_source.transformNode(xsl);
+      return ex;
       }
-    // code for Chrome, Firefox, Opera, etc.
+    // code for Chrome, Firefox, Opera, <etc class=""></etc>
     else if (document.implementation && document.implementation.createDocument)
       {
       xsltProcessor = new XSLTProcessor();
       xsltProcessor.importStylesheet(xsl);
-      resultDocument = xsltProcessor.transformToFragment(xml, document);
-      document.getElementById("example").appendChild(resultDocument);
+      resultDocument = xsltProcessor.transformToFragment(xml_source, document);
+      return resultDocument;
       }
     }
+
+    function download(filename, text_contents) {
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text_contents));
+      element.setAttribute('download', filename);
+
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    function convert(){
+        // Read uploaded document
+        const input_file = document.getElementById('input').files[0];
+        var reader = new FileReader();
+        reader.readAsText(input_file);
+
+        xml_source = reader;
+        // Translate document
+        interlis_file_contents = translate(xml_source);
+        // Start file download.
+        download("interlis2.txt",interlis_file_contents);
+    }
+
+
 </script>
 </head>
-<body onload="displayResult()">
-<div id="example"></div>
+<body>
+ISYBAU Stammdaten <input type="file" id="input" multiple><br>
+<input type="button" value="Convert File" onclick="convert();"></inputbutton>
 </body>
 </html>

@@ -20,7 +20,10 @@
     </MODELS>
 </HEADERSECTION>
 <DATASECTION>
-    <VSADSSMINI_2015.VSADSSMini BID="">
+    <VSADSSMINI_2015.VSADSSMini>
+        <xsl:attribute name="BID">
+	        <xsl:value-of select="//ib:Identifikation/ib:Datenkollektive/ib:Stammdatenkollektiv/ib:Kennung"/>
+        </xsl:attribute>
         <xsl:apply-templates select = "//ib:Identifikation/ib:Datenkollektive/ib:Stammdatenkollektiv" />
     </VSADSSMINI_2015.VSADSSMini>
 </DATASECTION>
@@ -102,7 +105,7 @@
             <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='DMP']/ib:Punkthoehe"/>
         </Deckelkote>
 
-        <!-- toDo Unsure if the accuracies are correctly converted -->
+        <!-- toDo Unsure if the accuracies are correctly converted. Uses Lagegenauigkeitsstufe, whereas Lagegenauigkeitsklasse would be better -->
         <Lagegenauigkeit>
             <xsl:choose>
                 <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=0">plusminus_3cm</xsl:when>
@@ -166,7 +169,7 @@
             </xsl:choose>
         </Status>
 
-        <!-- ToDO How can this be established? -->
+        <!-- ToDO How can this be established? Web page upload two files PAA and SAA and add? -->
         <FunktionHierarchisch/>
 
         <FunktionHydraulisch>
@@ -185,15 +188,42 @@
                 <xsl:otherwise>andere</xsl:otherwise>
             </xsl:choose>
         </FunktionHydraulisch>
-        <Hoehengenauigkeit_nach>unbekannt</Hoehengenauigkeit_nach>
-        <Hoehengenauigkeit_von>unbekannt</Hoehengenauigkeit_von>
-        <Kote_nach>593.602</Kote_nach>
-        <Kote_von>593.71</Kote_von>
-        <LaengeEffektiv>26.55</LaengeEffektiv>
-        <Lagebestimmung>genau</Lagebestimmung>
-        <Lichte_Breite>1200</Lichte_Breite>
-        <Lichte_Hoehe>1200</Lichte_Hoehe>
-        <Material>Asbestzement</Material>
+        <Hoehengenauigkeit_nach/><!-- toDo -->
+        <Hoehengenauigkeit_von/><!-- toDo -->
+        <Kote_nach><xsl:value-of select="ib:Kante/ib:SohlhoeheAblauf"/></Kote_nach>
+        <Kote_von><xsl:value-of select="ib:Kante/ib:SohlhoeheZulauf"/></Kote_von>
+        <LaengeEffektiv><xsl:value-of select="ib:Kante/ib:Laenge"/></LaengeEffektiv>
+        <Lagebestimmung/><!-- toDo -->
+        <Material>
+            <xsl:choose>
+                <xsl:when test="ib:Kante/ib:Material='AZ'">Asbestzement</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='B'">Beton_Normalbeton</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='OB'">Beton_Ortsbeton</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='BS'">Beton_Pressrohrbeton</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='PC'">Beton_Spezialbeton</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='P'">Beton_Spezialbeton</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='PCC'">Beton_Spezialbeton</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='SZB'">Beton_Spezialbeton</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='FZ'">Faserzement</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='GGG'">Guss_duktil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='GG'">Guss_Grauguss</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='PH'">Kunststoff_Epoxydharz</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='PEHD'">Kunststoff_Hartpolyethylen</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='GFK'">Kunststoff_Polyester_GUP</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='PE'">Kunststoff_Polyethylen</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='PP'">Kunststoff_Polypropylen</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='PVC'">Kunststoff_Polyvinilchlorid</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='PVCU'">Kunststoff_Polyvinilchlorid</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='KST'">Kunststoff_unbekannt</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='EIS'">Stahl</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='SFB'">Stahl</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='ST'">Stahl</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='CNS'">Stahl_rostfrei</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='MA'">Steinzeug</xsl:when>
+                <xsl:when test="ib:Kante/ib:Material='STZ'">Steinzeug</xsl:when>
+                <xsl:otherwise>andere</xsl:otherwise>
+            </xsl:choose>
+        </Material>
         <Nutzungsart_geplant>
             <xsl:choose>
                 <xsl:when test="ib:Entwaesserungsart='KR'">Regenabwasser</xsl:when>
@@ -226,35 +256,47 @@
                 <xsl:otherwise>andere</xsl:otherwise>
             </xsl:choose>
         </Nutzungsart_Ist>
-
-        <Profiltyp>Kreisprofil</Profiltyp>
+        <Lichte_Breite><xsl:value-of select="ib:Kante/ib:Profil/ib:Profilbreite"/></Lichte_Breite>
+        <Lichte_Hoehe><xsl:value-of select="ib:Kante/ib:Profil/ib:Profilhoehe"/></Lichte_Hoehe>
+        <Profiltyp>
+            <xsl:choose>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=0">Kreisprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=1">Eiprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=2">Maulprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=3">Rechteckprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=4">Kreisprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=5">offenes_Profil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=6">Eiprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=7">Maulprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=8">Spezialprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=9">Spezialprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=10">Spezialprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=11">Spezialprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=12">Spezialprofil</xsl:when>
+                <xsl:when test="ib:Kante/ib:Profil/ib:Profilart=13">Spezialprofil</xsl:when>
+                <xsl:otherwise>unbekannt</xsl:otherwise>
+            </xsl:choose>
+        </Profiltyp>
         <Verlauf>
             <POLYLINE>
+                <xsl:for-each select="ib:Geometrie[ib:GeoObjekttyp='L']/ib:Geometriedaten/ib:Polygone/ib:Polygon[ib:Polygonart=3]/ib:Kante/*">
                 <COORD>
-                    <C1>700104.792</C1>
-                    <C2>100042.846</C2>
+                    <C1><xsl:value-of select="ib:Rechtswert"/></C1>
+                    <C2><xsl:value-of select="ib:Hochwert"/></C2>
                 </COORD>
-                <COORD>
-                    <C1>700105.148</C1>
-                    <C2>100039.883</C2>
-                </COORD>
-                <COORD>
-                    <C1>700104.02</C1>
-                    <C2>100038.67</C2>
-                </COORD>
-                <COORD>
-                    <C1>700102.64</C1>
-                    <C2>100038.39</C2>
-                </COORD>
-                <COORD>
-                    <C1>700082.3</C1>
-                    <C2>100035.83</C2>
-                </COORD>
+                </xsl:for-each>
             </POLYLINE>
         </Verlauf>
-
-        <Knoten_nachRef REF="PAA_KN27"/>
-        <Knoten_vonRef REF="PAA_KN26"/>
+        <Knoten_nachRef>
+            <xsl:attribute name="REF">
+	            <xsl:value-of select="ib:Kante/ib:KnotenAblauf"/>
+            </xsl:attribute>
+        </Knoten_nachRef>
+        <Knoten_vonRef>
+            <xsl:attribute name="REF">
+	            <xsl:value-of select="ib:Kante/ib:KnotenZulauf"/>
+            </xsl:attribute>
+        </Knoten_vonRef>
     </VSADSSMINI_2015.VSADSSMini.Leitung>
 </xsl:template>
 </xsl:transform>

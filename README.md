@@ -1,8 +1,11 @@
 # isybau2interlis
-XML Stylesheet Transformation configuration to convert Geman ISYBAU format to Swiss VSA-DSS Mini Interlis 2 Model.
+XML Stylesheet Transformation configuration to convert German wastewater infrastructure data in the ISYBAU format 
+to the swiss VSA-DSS Mini data structure in the Interlis 2 geodata format.
 
 # Useage
-Use either the XSLX stylesheet in an application, or convert using the webpage_example.html
+Download the repository.
+
+Use either the [XSLX stylesheet](https://en.wikipedia.org/wiki/XSLT) directly in an application, or convert using the webpage_example.html
 
 This is currently in development. Please feel free to contact me regarding contribution/issues/improvements.
 
@@ -19,6 +22,6 @@ In the meantime, the swiss VSA offer a
 [conversion service](https://vsa.ch/fachbereiche-cc/siedlungsentwaesserung/generelle-entwaesserungsplanung/datenmanagement/) 
 between different VSA and SIA models. 
 
-Inclusion of other ISYBAU data groups, including hydraulic and record of condition
+Inclusion of other ISYBAU data groups (eg: hydraulic and record of condition data).
 
-Conversion of swiss VSA-DSS to ISYBAU (other direction).
+Conversion of swiss VSA-DSS data to ISYBAU data (other direction).
