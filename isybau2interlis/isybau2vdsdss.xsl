@@ -4,7 +4,6 @@
                exclude-result-prefixes="ib"
                version="1.0">
     <!-- Import XLST components -->
-    <xsl:import href="imports/geometry.xsl"/>
     <xsl:import href="imports/base.xsl"/>
     <!-- Declare output XML Style -->
     <xsl:output method="xml" indent="yes"/>
@@ -24,6 +23,8 @@
         <xsl:attribute name="BID">
 	        <xsl:value-of select="//ib:Identifikation/ib:Datenkollektive/ib:Stammdatenkollektiv/ib:Kennung"/>
         </xsl:attribute>
+        <!-- ToDo :consider using loop and sorting according to ReihenfolgeID -->
+
         <xsl:apply-templates select = "//ib:Identifikation/ib:Datenkollektive/ib:Stammdatenkollektiv" />
     </VSADSSMINI_2015.VSADSSMini>
 </DATASECTION>
@@ -44,29 +45,10 @@
         <Bemerkung><xsl:value-of select="ib:Kommentar"/></Bemerkung>
         <Betreiber/>
         <Bezeichnung><xsl:value-of select="ib:Objektbezeichnung"/></Bezeichnung>
-        <Eigentuemer>
-            <xsl:choose>
-                <xsl:when test="ib:Eigentum=1">Öffentlich</xsl:when>
-                <xsl:when test="ib:Eigentum=2">Privat</xsl:when>
-                <xsl:when test="ib:Eigentum=3">Bund</xsl:when>
-                <xsl:when test="ib:Eigentum=4">Land</xsl:when>
-                <xsl:when test="ib:Eigentum=5">sonstige</xsl:when>
-            </xsl:choose>
-        </Eigentuemer>
+        <xsl:call-template name="Eigentuemer"/>
         <Finanzierung/>
         <Sanierungsbedarf/>
-        <Status>
-            <xsl:choose>
-                <xsl:when test="ib:Status=0">in_Betrieb</xsl:when>
-                <xsl:when test="ib:Status=1">weitere.geplant</xsl:when>
-                <xsl:when test="ib:Status=2">weitere.Berechnungsvariante</xsl:when>
-                <xsl:when test="ib:Status=3">ausser_Betrieb</xsl:when>
-                <xsl:when test="ib:Status=4">tot.verfuellt</xsl:when>
-                <xsl:when test="ib:Status=5">weitere</xsl:when>
-                <xsl:when test="ib:Status=6">weitere</xsl:when>
-                <xsl:otherwise>weitere</xsl:otherwise>
-            </xsl:choose>
-        </Status>
+        <xsl:call-template name="Status"/>
 
         <!-- ToDo only <KnotenTyp>0 : Schacht and Anschlusspunkt 1 is covered. Bauwerk 2 neeed to be covered -->
         <Funktion>
@@ -88,7 +70,7 @@
             </xsl:choose>
         </Funktion>
 
-        <!-- ToDO How can this be established? -->
+        <!-- ToDO How can this be established? Found in Haltung bis schacht? -->
         <FunktionHierarchisch/>
 
         <!-- ToDo Likely not all points identified. Risk of multiple points -->
@@ -140,37 +122,21 @@
 	        <xsl:value-of select="ib:Objektbezeichnung"/>
         </xsl:attribute>
         <OBJ_ID><xsl:value-of select="ib:Objektbezeichnung"/></OBJ_ID>
-        <!-- xsl:call-template name="metaattribute"></xsl:call-template -->
         <Baujahr><xsl:value-of select="ib:Baujahr"/></Baujahr>
         <Bemerkung><xsl:value-of select="ib:Kommentar"/></Bemerkung>
         <Betreiber/>
         <Bezeichnung><xsl:value-of select="ib:Objektbezeichnung"/></Bezeichnung>
-        <Eigentuemer>
-            <xsl:choose>
-                <xsl:when test="ib:Eigentum=1">Öffentlich</xsl:when>
-                <xsl:when test="ib:Eigentum=2">Privat</xsl:when>
-                <xsl:when test="ib:Eigentum=3">Bund</xsl:when>
-                <xsl:when test="ib:Eigentum=4">Land</xsl:when>
-                <xsl:when test="ib:Eigentum=5">sonstige</xsl:when>
-            </xsl:choose>
-        </Eigentuemer>
         <Finanzierung/>
         <Sanierungsbedarf/>
-        <Status>
-            <xsl:choose>
-                <xsl:when test="ib:Status=0">in_Betrieb</xsl:when>
-                <xsl:when test="ib:Status=1">weitere.geplant</xsl:when>
-                <xsl:when test="ib:Status=2">weitere.Berechnungsvariante</xsl:when>
-                <xsl:when test="ib:Status=3">ausser_Betrieb</xsl:when>
-                <xsl:when test="ib:Status=4">tot.verfuellt</xsl:when>
-                <xsl:when test="ib:Status=5">weitere</xsl:when>
-                <xsl:when test="ib:Status=6">weitere</xsl:when>
-                <xsl:otherwise>weitere</xsl:otherwise>
-            </xsl:choose>
-        </Status>
+        <xsl:call-template name="Status"/>
 
-        <!-- ToDO How can this be established? Web page upload two files PAA and SAA and add? -->
-        <FunktionHierarchisch/>
+        <!-- ToDO How can this be improved? -->
+        <FunktionHierarchisch>
+            <xsl:choose>
+                <xsl:when test="ib:Kante/ib:Haltung">PAA.andere</xsl:when>
+                <xsl:otherwise>SAA.andere</xsl:otherwise>
+            </xsl:choose>
+        </FunktionHierarchisch>
 
         <FunktionHydraulisch>
             <xsl:choose>
@@ -297,6 +263,11 @@
 	            <xsl:value-of select="ib:Kante/ib:KnotenZulauf"/>
             </xsl:attribute>
         </Knoten_vonRef>
+        <Leitung_nachRef>
+            <xsl:attribute name="REF">
+	            <xsl:value-of select="ib:Kante/*/ib:Anschlussdaten/ib:Objektbezeichnung"/>
+            </xsl:attribute>
+        </Leitung_nachRef><!-- ToDo -->
     </VSADSSMINI_2015.VSADSSMini.Leitung>
 </xsl:template>
 </xsl:transform>
