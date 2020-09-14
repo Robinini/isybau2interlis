@@ -23,7 +23,7 @@
         <xsl:attribute name="BID">
 	        <xsl:value-of select="//ib:Identifikation/ib:Datenkollektive/ib:Stammdatenkollektiv/ib:Kennung"/>
         </xsl:attribute>
-        <!-- ToDo :consider using loop and sorting according to ReihenfolgeID -->
+        <!-- ToDo : Future: consider using loop and sorting according to ReihenfolgeID -->
 
         <xsl:apply-templates select = "//ib:Identifikation/ib:Datenkollektive/ib:Stammdatenkollektiv" />
     </VSADSSMINI_2015.VSADSSMini>
@@ -50,7 +50,7 @@
         <Sanierungsbedarf/>
         <xsl:call-template name="Status"/>
 
-        <!-- ToDo only <KnotenTyp>0 : Schacht and Anschlusspunkt 1 is covered. Bauwerk 2 neeed to be covered -->
+        <!-- ToDo only <KnotenTyp>0 : Schacht and Anschlusspunkt 1 is covered. Bauwerk 2 neeeds to be implemeted -->
         <Funktion>
             <xsl:choose>
                 <xsl:when test="ib:Knoten/ib:KnotenTyp=1">Leitungsknoten</xsl:when>
@@ -70,10 +70,15 @@
             </xsl:choose>
         </Funktion>
 
-        <!-- ToDO How can this be established? Found in Haltung bis schacht? -->
-        <FunktionHierarchisch/>
+        <!-- Is PAA Knoten if Found in Haltung(PAA)/Kante/KnotenAblauf or KnotenZulauf -->
+        <FunktionHierarchisch>
+            <xsl:choose>
+                <xsl:when test="ib:Kante[ib:Haltung]/ib:KnotenZulauf=ib:Objektbezeichnung">PAA</xsl:when>
+                <xsl:when test="ib:Kante[ib:Haltung]/ib:KnotenAblauf=ib:Objektbezeichnung">PAA</xsl:when>
+                <xsl:otherwise>SAA</xsl:otherwise>
+            </xsl:choose>
+        </FunktionHierarchisch>
 
-        <!-- ToDo Likely not all points identified. Risk of multiple points -->
         <Sohlenkote>
             <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Punkthoehe"/>
         </Sohlenkote>
@@ -81,25 +86,18 @@
             <COORD>
                 <C1><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Rechtswert"/></C1>
                 <C2><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Hochwert"/></C2>
+                <C3><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Punkthoehe"/></C3>
             </COORD>
         </Lage>
         <Deckelkote>
             <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='DMP']/ib:Punkthoehe"/>
         </Deckelkote>
 
-        <!-- toDo Unsure if the accuracies are correctly converted. Uses Lagegenauigkeitsstufe, whereas Lagegenauigkeitsklasse would be better -->
         <Lagegenauigkeit>
             <xsl:choose>
-                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=0">plusminus_3cm</xsl:when>
-                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=1">plusminus_50cm</xsl:when>
-                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=2">groesser_50cm</xsl:when>
-                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=3">plusminus_50cm</xsl:when>
-                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=4">groesser_50cm</xsl:when>
-                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=5">plusminus_10cm</xsl:when>
-                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=6">plusminus_3cm</xsl:when>
-                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=7">plusminus_10cm</xsl:when>
-                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=8">plusminus_10cm</xsl:when>
-                <xsl:when test="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Lagegenauigkeitsstufe=9">unbekannt</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Lagegenauigkeitsklasse='OGL1'">plusminus_10cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Lagegenauigkeitsklasse='OGL2'">plusminus_10cm</xsl:when>
+                <xsl:when test="ib:Geometrie/ib:Lagegenauigkeitsklasse='OGL3'">plusminus_3cm</xsl:when>
                 <xsl:otherwise>unbekannt</xsl:otherwise>
             </xsl:choose>
         </Lagegenauigkeit>
@@ -130,7 +128,6 @@
         <Sanierungsbedarf/>
         <xsl:call-template name="Status"/>
 
-        <!-- ToDO How can this be improved? -->
         <FunktionHierarchisch>
             <xsl:choose>
                 <xsl:when test="ib:Kante/ib:Haltung">PAA.andere</xsl:when>
@@ -249,6 +246,7 @@
                 <COORD>
                     <C1><xsl:value-of select="ib:Rechtswert"/></C1>
                     <C2><xsl:value-of select="ib:Hochwert"/></C2>
+                    <C3><xsl:value-of select="ib:Punkthoehe"/></C3>
                 </COORD>
                 </xsl:for-each>
             </POLYLINE>
@@ -267,7 +265,7 @@
             <xsl:attribute name="REF">
 	            <xsl:value-of select="ib:Kante/*/ib:Anschlussdaten/ib:Objektbezeichnung"/>
             </xsl:attribute>
-        </Leitung_nachRef><!-- ToDo -->
+        </Leitung_nachRef>
     </VSADSSMINI_2015.VSADSSMini.Leitung>
 </xsl:template>
 </xsl:transform>

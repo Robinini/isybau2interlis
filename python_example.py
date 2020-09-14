@@ -11,11 +11,11 @@ def convert(input):
     return transform(dom)
 
 paa = convert(xml_filename_paa)
-paa.write('example_files/output/KD-Kappel Haltungen 2013-02.xtf')
+paa.write('example_files/output/KD-Kappel Haltungen 2013-02.xtf', pretty_print=True)
 print(ET.tostring(paa, pretty_print=True, xml_declaration=True, encoding="utf-8").decode("utf-8"))
 
 saa = convert(xml_filename_saa)
-saa.write('example_files/output/KD-Kappel Leitungen 2013-02.xtf')
+saa.write('example_files/output/KD-Kappel Leitungen 2013-02.xtf', pretty_print=True)
 print(ET.tostring(paa, pretty_print=True, xml_declaration=True, encoding="utf-8").decode("utf-8"))
 
 

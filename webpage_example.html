@@ -48,23 +48,28 @@
       document.body.removeChild(element);
     }
 
-    function convert(){
+    function convert(xml_source){
+        // Translate document
+        interlis_file_contents = translate(xml_source);
+        // Start file download.
+        download("interlis2.txt", interlis_file_contents);
+    }
+
+    function read_uploaded_file(){
         // Read uploaded document
         const input_file = document.getElementById('input').files[0];
         var reader = new FileReader();
         reader.readAsText(input_file);
-
-        xml_source = reader;
-        // Translate document
-        interlis_file_contents = translate(xml_source);
-        // Start file download.
-        download("interlis2.txt",interlis_file_contents);
+        return reader;
     }
 
 
 </script>
 </head>
 <body>
+
+NB: Not yet working!<br>
+
 ISYBAU Stammdaten <input type="file" id="input" multiple><br>
 <input type="button" value="Convert File" onclick="convert();"></inputbutton>
 </body>
