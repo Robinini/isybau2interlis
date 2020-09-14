@@ -31,6 +31,8 @@
 </TRANSFER>
 </xsl:template>
 
+<!-- ToDo: Abwasserbauwerk Detailgeometrie using Flaechen Daten -->
+
 <!-- Hide 'Kennung' tag -->
 <xsl:template match="ib:Kennung"/>
 
@@ -71,6 +73,7 @@
         </Funktion>
 
         <!-- Is PAA Knoten if Found in Haltung(PAA)/Kante/KnotenAblauf or KnotenZulauf -->
+        <!-- ToDo: Not convinced this works - all Knoten are SAA -->
         <FunktionHierarchisch>
             <xsl:choose>
                 <xsl:when test="ib:Kante[ib:Haltung]/ib:KnotenZulauf=ib:Objektbezeichnung">PAA</xsl:when>
@@ -86,7 +89,7 @@
             <COORD>
                 <C1><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Rechtswert"/></C1>
                 <C2><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Hochwert"/></C2>
-                <C3><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Punkthoehe"/></C3>
+                <!--C3><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP' or ib:PunktattributAbwasser='AP']/ib:Punkthoehe"/></C3-->
             </COORD>
         </Lage>
         <Deckelkote>
@@ -246,7 +249,7 @@
                 <COORD>
                     <C1><xsl:value-of select="ib:Rechtswert"/></C1>
                     <C2><xsl:value-of select="ib:Hochwert"/></C2>
-                    <C3><xsl:value-of select="ib:Punkthoehe"/></C3>
+                    <!-- C3><xsl:value-of select="ib:Punkthoehe"/></C3 -->
                 </COORD>
                 </xsl:for-each>
             </POLYLINE>
