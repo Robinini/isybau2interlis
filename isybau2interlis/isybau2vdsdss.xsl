@@ -2,14 +2,15 @@
 <xsl:transform xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:ib="http://www.ofd-hannover.la/Identifikation"
                exclude-result-prefixes="ib"
+               xmlns="http://www.interlis.ch/INTERLIS2.3"
                version="1.0">
     <!-- Import XLST components -->
     <xsl:import href="imports/base.xsl"/>
     <!-- Declare output XML Style -->
-    <xsl:output method="xml" indent="yes"/>
+    <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
 
     <xsl:template match="/"><!-- match whole document -->
-<TRANSFER xmlns="http://www.interlis.ch/INTERLIS2.3">
+<TRANSFER>
 <HEADERSECTION SENDER="ili2fme-5.7.6-20121121" VERSION="2.3">
     <MODELS>
         <MODEL NAME="Units" VERSION="2012-02-20" URI="http://www.interlis.ch/models"/>
