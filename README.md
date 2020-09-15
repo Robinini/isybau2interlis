@@ -5,7 +5,7 @@ to the swiss VSA-DSS Mini data structure in the Interlis 2 geodata format.
 # Useage
 Download the repository.
 
-Use the [XSLX stylesheet](https://en.wikipedia.org/wiki/XSLT) directly in an application, eg the [Python example](python_example.py)
+Use the [XSLT stylesheet](https://en.wikipedia.org/wiki/XSLT) directly in an application, eg the [Python example](python_example.py)
 
 This is currently in development. Please feel free to contact me regarding contribution/issues/improvements.
 
