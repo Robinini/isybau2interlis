@@ -12,7 +12,7 @@ This is currently in development. Please feel free to contact me regarding contr
 # Limits
 Currently only the sewerage infrastructure data (Stammdaten) data group is supported.
 Data not covered in the target model structure is not converted.
-Bauwerk point types are not implemented (yet). Abwasserbauwerk Detailgeometrie is not supported (yet).
+Bauwerk point types are not implemented (yet).
 
 # Issues
 See the GitHub Issues and ToDo comments in the code. This is very much an initial attempt.
