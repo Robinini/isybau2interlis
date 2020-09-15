@@ -2,12 +2,14 @@
 <xsl:transform xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                xmlns:ib="http://www.ofd-hannover.la/Identifikation"
                exclude-result-prefixes="ib"
+               xmlns="http://www.interlis.ch/INTERLIS2.3"
                version="1.0">
     <xsl:output method="xml" indent="yes"/>
 
     <!-- VSA and SIA Base Templates -->
     <xsl:template name="Eigentuemer">
-            <Eigentuemer>
+        <xsl:if test="ib:Eigentum[normalize-space()]">
+        <Eigentuemer>
             <xsl:choose>
                 <xsl:when test="ib:Eigentum=1">Öffentlich</xsl:when>
                 <xsl:when test="ib:Eigentum=2">Privat</xsl:when>
@@ -16,9 +18,11 @@
                 <xsl:when test="ib:Eigentum=5">sonstige</xsl:when>
             </xsl:choose>
         </Eigentuemer>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="Status">
+        <xsl:if test="ib:Status[normalize-space()]">
         <Status>
             <xsl:choose>
                 <xsl:when test="ib:Status=0">in_Betrieb</xsl:when>
@@ -31,8 +35,6 @@
                 <xsl:otherwise>weitere</xsl:otherwise>
             </xsl:choose>
         </Status>
+        </xsl:if>
     </xsl:template>
-
-
-
 </xsl:transform>

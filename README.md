@@ -5,7 +5,7 @@ to the swiss VSA-DSS Mini data structure in the Interlis 2 geodata format.
 # Useage
 Download the repository.
 
-Use either the [XSLX stylesheet](https://en.wikipedia.org/wiki/XSLT) directly in an application, or convert using the webpage_example.html
+Use the [XSLX stylesheet](https://en.wikipedia.org/wiki/XSLT) directly in an application, eg the [Python example](python_example.py)
 
 This is currently in development. Please feel free to contact me regarding contribution/issues/improvements.
 
@@ -15,7 +15,7 @@ Data not covered in the target model structure is not converted.
 Bauwerk point types are not implemented (yet). Abwasserbauwerk Detailgeometrie is not supported (yet).
 
 # Issues
-See the ToDo comments in the code. This is very much an initial attempt.
+See the GitHub Issues and ToDo comments in the code. This is very much an initial attempt.
 
 # Outlook
 Future work could include conversions to other swiss VSA/SIA models. 
