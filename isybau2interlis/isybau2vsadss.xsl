@@ -126,7 +126,7 @@
             <Deckelkote>
                 <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='DMP'
                                                                     or ib:PunktattributAbwasser='GOK'
-                                                                or ib:PunktattributAbwasser!='SBD']/ib:Punkthoehe"/>
+                                                                or ib:PunktattributAbwasser='SBD']/ib:Punkthoehe"/>
             </Deckelkote>
 
             <Lagegenauigkeit>
@@ -213,12 +213,6 @@
                     <xsl:otherwise>unbekannt</xsl:otherwise>
                 </xsl:choose>
             </Hoehengenauigkeit_nach>
-                <xsl:choose>
-                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL1'">plusminus_6cm</xsl:when>
-                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL2'">plusminus_3cm</xsl:when>
-                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL3'">plusminus_1cm</xsl:when>
-                    <xsl:otherwise>unbekannt</xsl:otherwise>
-                </xsl:choose>
             <Hoehengenauigkeit_von>
                 <xsl:choose>
                     <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL1'">plusminus_6cm</xsl:when>
