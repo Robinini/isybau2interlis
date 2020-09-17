@@ -1,7 +1,7 @@
 import lxml.etree as ET
 
 
-xsl_filename = 'isybau2interlis/isybau2vdsdss.xsl'
+xsl_filename = 'isybau2interlis/isybau2vsadss.xsl'
 
 def convert(input):
     dom = ET.parse(input)
