@@ -24,16 +24,14 @@
             <xsl:attribute name="BID">
                 <xsl:value-of select="//ib:Identifikation/ib:Datenkollektive/ib:Stammdatenkollektiv/ib:Kennung"/>
             </xsl:attribute>
-            <!-- ToDo : Future: consider using loop and sorting according to ReihenfolgeID -->
-
             <xsl:apply-templates select = "//ib:Identifikation/ib:Datenkollektive/ib:Stammdatenkollektiv" />
         </VSADSSMINI_2015.VSADSSMini>
     </DATASECTION>
     </TRANSFER>
     </xsl:template>
 
-    <!-- Hide 'Kennung' tag -->
-    <xsl:template match="ib:Kennung"/>
+    <!-- do not display tags which do not match a template -->
+    <xsl:template match="text()"/>
 
     <!-- Knoten -->
     <xsl:template match="ib:AbwassertechnischeAnlage[ib:Objektart=2]">
@@ -44,14 +42,12 @@
             <OBJ_ID><xsl:value-of select="ib:Objektbezeichnung"/></OBJ_ID>
             <Baujahr><xsl:value-of select="ib:Baujahr"/></Baujahr>
             <Bemerkung><xsl:value-of select="ib:Kommentar"/></Bemerkung>
-            <!-- <Betreiber/> -->
             <Bezeichnung><xsl:value-of select="ib:Objektbezeichnung"/></Bezeichnung>
             <xsl:call-template name="Eigentuemer"/>
             <Finanzierung/>
             <Sanierungsbedarf/>
             <xsl:call-template name="Status"/>
 
-            <!-- ToDo: only <KnotenTyp>0 : Schacht and Anschlusspunkt 1 is covered. Bauwerk 2 neeeds to be implemeted -->
             <Funktion>
                 <xsl:choose>
                     <xsl:when test="ib:Knoten/ib:KnotenTyp=1">Leitungsknoten</xsl:when>
@@ -67,52 +63,83 @@
                     <xsl:when test="ib:Knoten/ib:KnotenTyp=0 and ib:Knoten/ib:Schacht/ib:SchachtFunktion=10">Kontrollschacht</xsl:when>
                     <xsl:when test="ib:Knoten/ib:KnotenTyp=0 and ib:Knoten/ib:Schacht/ib:SchachtFunktion=11">Spuelschacht</xsl:when>
                     <xsl:when test="ib:Knoten/ib:KnotenTyp=0 and ib:Knoten/ib:Schacht/ib:SchachtFunktion=12">Messstelle</xsl:when>
+
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=1">Pumpwerk</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=2
+                                and ib:Knoten/ib:Bauwerk/ib:Becken/ib:BeckenFunktion='RUEB'">Regenbecken_Fangbecken</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=2
+                                and ib:Knoten/ib:Bauwerk/ib:Becken/ib:BeckenFunktion='RKBOD'">Regenbecken_Regenklaerbecken</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=2
+                                and ib:Knoten/ib:Bauwerk/ib:Becken/ib:BeckenFunktion='RKBMD'">Regenbecken_Regenklaerbecken</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=2
+                                and ib:Knoten/ib:Bauwerk/ib:Becken/ib:BeckenFunktion='RRB'">Regenbecken_Regenrueckhaltebecken</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=2
+                                and ib:Knoten/ib:Bauwerk/ib:Becken/ib:BeckenFunktion='RRSB'">Regenbecken_Regenrueckhaltebecken</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=2
+                                and ib:Knoten/ib:Bauwerk/ib:Becken/ib:BeckenFunktion='RRG'">Regenbecken_Regenrueckhaltebecken</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=2">Regenbecken_Regenrueckhaltebecken</xsl:when>
+
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=3">andere</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=4">andere</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=5">Einleitstelle_gewaesserrelevant</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=6">Pumpwerk</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=7">Regenueberlauf</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=8">andere</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=9">andere</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=10">andere</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=11">andere</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=12">Versickerungsanlage</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=13">andere</xsl:when>
+                    <xsl:when test="ib:Knoten/ib:KnotenTyp=2 and ib:Knoten/ib:Bauwerk/ib:Bauwerkstyp=14">Einlaufschacht</xsl:when>
                     <xsl:otherwise>andere</xsl:otherwise>
                 </xsl:choose>
             </Funktion>
 
             <!-- Is PAA Knoten if Found in Haltung(PAA)/Kante/KnotenAblauf or KnotenZulauf -->
-            <!-- ToDo: Not convinced this works - all Knoten are SAA -->
-            <!--FunktionHierarchisch>
+            <FunktionHierarchisch>
+                <xsl:variable name="knotenbezeichnung" select="ib:Objektbezeichnung"/>
                 <xsl:choose>
-                    <xsl:when test="//ib:Kante[ib:Haltung]/ib:KnotenZulauf[text() = ib:Objektbezeichnung]">PAA</xsl:when>
-                    <xsl:when test="//ib:Kante[ib:Haltung]/ib:KnotenAblauf[text() = ib:Objektbezeichnung]">PAA</xsl:when>
+                    <xsl:when test="//ib:Kante[ib:KantenTyp=0 and ib:KnotenZulauf=$knotenbezeichnung]">PAA</xsl:when>
+                    <xsl:when test="//ib:Kante[ib:KantenTyp=0 and ib:KnotenAblauf=$knotenbezeichnung]">PAA</xsl:when>
                     <xsl:otherwise>SAA</xsl:otherwise>
                 </xsl:choose>
-            </FunktionHierarchisch-->
+            </FunktionHierarchisch>
 
             <Sohlenkote>
-                <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP'
-                or ib:PunktattributAbwasser='AP' or ib:PunktattributAbwasser='GA' or ib:PunktattributAbwasser='NN'
-                or ib:PunktattributAbwasser='RR' or ib:PunktattributAbwasser='SE' or ib:PunktattributAbwasser='ZLK']/ib:Punkthoehe"/>
+                <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser!='DMP'
+                                                                and ib:PunktattributAbwasser!='GOK'
+                                                                and ib:PunktattributAbwasser!='SBD']/ib:Punkthoehe"/>
             </Sohlenkote>
             <Lage>
                 <COORD>
-                    <C1><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP'
-                or ib:PunktattributAbwasser='AP' or ib:PunktattributAbwasser='GA' or ib:PunktattributAbwasser='NN'
-                or ib:PunktattributAbwasser='RR' or ib:PunktattributAbwasser='SE' or ib:PunktattributAbwasser='ZLK']/ib:Rechtswert"/></C1>
-                    <C2><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP'
-                or ib:PunktattributAbwasser='AP' or ib:PunktattributAbwasser='GA' or ib:PunktattributAbwasser='NN'
-                or ib:PunktattributAbwasser='RR' or ib:PunktattributAbwasser='SE' or ib:PunktattributAbwasser='ZLK']/ib:Hochwert"/></C2>
-                    <!--C3><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='SMP'
-                or ib:PunktattributAbwasser='AP' or ib:PunktattributAbwasser='GA' or ib:PunktattributAbwasser='NN'
-                or ib:PunktattributAbwasser='RR' or ib:PunktattributAbwasser='SE' or ib:PunktattributAbwasser='ZLK']/ib:Punkthoehe"/></C3-->
+                    <C1><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser!='DMP'
+                                                                and ib:PunktattributAbwasser!='GOK'
+                                                                and ib:PunktattributAbwasser!='SBD']/ib:Rechtswert"/></C1>
+                    <C2><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser!='DMP'
+                                                                and ib:PunktattributAbwasser!='GOK'
+                                                                and ib:PunktattributAbwasser!='SBD']/ib:Hochwert"/></C2>
+                    <!--C3><xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser!='DMP'
+                                                                and ib:PunktattributAbwasser!='GOK'
+                                                                and ib:PunktattributAbwasser!='SBD']/ib:Punkthoehe"/></C3-->
                 </COORD>
             </Lage>
             <Deckelkote>
-                <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='DMP' or ib:PunktattributAbwasser='GOK']/ib:Punkthoehe"/>
+                <xsl:value-of select="ib:Geometrie/ib:Geometriedaten/ib:Knoten/ib:Punkt[ib:PunktattributAbwasser='DMP'
+                                                                    or ib:PunktattributAbwasser='GOK'
+                                                                or ib:PunktattributAbwasser!='SBD']/ib:Punkthoehe"/>
             </Deckelkote>
 
             <Lagegenauigkeit>
                 <xsl:choose>
-                    <xsl:when test="ib:Geometrie/ib:Lagegenauigkeitsklasse='OGL1'">plusminus_10cm</xsl:when>
+                    <xsl:when test="ib:Geometrie/ib:Lagegenauigkeitsklasse='OGL1'">plusminus_50cm</xsl:when>
                     <xsl:when test="ib:Geometrie/ib:Lagegenauigkeitsklasse='OGL2'">plusminus_10cm</xsl:when>
                     <xsl:when test="ib:Geometrie/ib:Lagegenauigkeitsklasse='OGL3'">plusminus_3cm</xsl:when>
                     <xsl:otherwise>unbekannt</xsl:otherwise>
                 </xsl:choose>
             </Lagegenauigkeit>
 
-            <!-- ToDo: ISYBAU spec: Polygonart = 2 outer ring, = 1 inner ring. Ignored as test data had only inner polygons -->
+            <!-- ToDo: According to the ISYBAU specification: Polygonart = 2 : outer ring, Polygonart = 1 : inner ring.
+                 All rings are assumed to be outer as real world dataset has only inner polygons -->
             <xsl:for-each select="ib:Geometrie[ib:GeoObjekttyp='P']/ib:Geometriedaten/ib:Polygone/ib:Polygon">
             <Detailgeometrie>
                 <SURFACE>
@@ -150,7 +177,6 @@
             <OBJ_ID><xsl:value-of select="ib:Objektbezeichnung"/></OBJ_ID>
             <Baujahr><xsl:value-of select="ib:Baujahr"/></Baujahr>
             <Bemerkung><xsl:value-of select="ib:Kommentar"/></Bemerkung>
-            <!-- <Betreiber/> -->
             <Bezeichnung><xsl:value-of select="ib:Objektbezeichnung"/></Bezeichnung>
             <Finanzierung/>
             <Sanierungsbedarf/>
@@ -158,7 +184,7 @@
 
             <FunktionHierarchisch>
                 <xsl:choose>
-                    <xsl:when test="ib:Kante/ib:Haltung">PAA.andere</xsl:when>
+                    <xsl:when test="ib:Kante/ib:KantenTyp=0">PAA.andere</xsl:when>
                     <xsl:otherwise>SAA.andere</xsl:otherwise>
                 </xsl:choose>
             </FunktionHierarchisch>
@@ -179,12 +205,39 @@
                     <xsl:otherwise>andere</xsl:otherwise>
                 </xsl:choose>
             </FunktionHydraulisch>
-            <Hoehengenauigkeit_nach/><!-- toDo -->
-            <Hoehengenauigkeit_von/><!-- toDo -->
+            <Hoehengenauigkeit_nach>
+                <xsl:choose>
+                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL1'">plusminus_6cm</xsl:when>
+                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL2'">plusminus_3cm</xsl:when>
+                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL3'">plusminus_1cm</xsl:when>
+                    <xsl:otherwise>unbekannt</xsl:otherwise>
+                </xsl:choose>
+            </Hoehengenauigkeit_nach>
+                <xsl:choose>
+                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL1'">plusminus_6cm</xsl:when>
+                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL2'">plusminus_3cm</xsl:when>
+                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL3'">plusminus_1cm</xsl:when>
+                    <xsl:otherwise>unbekannt</xsl:otherwise>
+                </xsl:choose>
+            <Hoehengenauigkeit_von>
+                <xsl:choose>
+                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL1'">plusminus_6cm</xsl:when>
+                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL2'">plusminus_3cm</xsl:when>
+                    <xsl:when test="ib:Geometrie/ib:Hoehengenauigkeitsklasse='OGL3'">plusminus_1cm</xsl:when>
+                    <xsl:otherwise>unbekannt</xsl:otherwise>
+                </xsl:choose>
+            </Hoehengenauigkeit_von>
             <Kote_nach><xsl:value-of select="ib:Kante/ib:SohlhoeheAblauf"/></Kote_nach>
             <Kote_von><xsl:value-of select="ib:Kante/ib:SohlhoeheZulauf"/></Kote_von>
             <LaengeEffektiv><xsl:value-of select="ib:Kante/ib:Laenge"/></LaengeEffektiv>
-            <Lagebestimmung/><!-- toDo -->
+            <Lagebestimmung>
+                <xsl:choose>
+                    <xsl:when test="ib:Geometrie/ib:Lagegenauigkeitsklasse='OGL1'">genau</xsl:when>
+                    <xsl:when test="ib:Geometrie/ib:Lagegenauigkeitsklasse='OGL2'">genau</xsl:when>
+                    <xsl:when test="ib:Geometrie/ib:Lagegenauigkeitsklasse='OGL3'">genau</xsl:when>
+                    <xsl:otherwise>unbekannt</xsl:otherwise>
+                </xsl:choose>
+            </Lagebestimmung>
             <Material>
                 <xsl:choose>
                     <xsl:when test="ib:Kante/ib:Material='AZ'">Asbestzement</xsl:when>

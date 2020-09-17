@@ -1,7 +1,6 @@
 import lxml.etree as ET
 
-xml_filename_paa = 'example_files/isybau/KD-Kappel Haltungen 2013-02.xml'
-xml_filename_saa = 'example_files/isybau/KD-Kappel Leitungen 2013-02.xml'
+
 xsl_filename = 'isybau2interlis/isybau2vdsdss.xsl'
 
 def convert(input):
@@ -10,12 +9,12 @@ def convert(input):
     transform = ET.XSLT(xslt)
     return transform(dom)
 
-paa = convert(xml_filename_paa)
-paa.write('example_files/output/KD-Kappel Haltungen 2013-02.xtf', pretty_print=True, encoding='utf-8', xml_declaration=True)
-print(ET.tostring(paa, pretty_print=True, xml_declaration=True, encoding="utf-8").decode("utf-8"))
 
-saa = convert(xml_filename_saa)
-saa.write('example_files/output/KD-Kappel Leitungen 2013-02.xtf', pretty_print=True, encoding='utf-8', xml_declaration=True)
-print(ET.tostring(paa, pretty_print=True, xml_declaration=True, encoding="utf-8").decode("utf-8"))
+muster_2013 = convert('example_files/isybau/ISYBAU_XML_2013_Schema_Beispieldaten/2_Stammdaten/ISYBAU_XML-2013-Stammdaten.xml')
 
+# Save to file
+muster_2013.write('example_files/output/ISYBAU_XML-2013-Stammdaten.xtf', pretty_print=True, encoding='utf-8', xml_declaration=True)
+
+# Print to screen
+print(ET.tostring(muster_2013, pretty_print=True, xml_declaration=True, encoding="utf-8").decode("utf-8"))
 
