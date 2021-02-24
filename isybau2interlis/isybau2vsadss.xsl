@@ -319,7 +319,7 @@
             </xsl:if>
             <Verlauf>
                 <POLYLINE>
-                    <xsl:for-each select="ib:Geometrie[ib:GeoObjekttyp='L']/ib:Geometriedaten/ib:Polygone/ib:Polygon[ib:Polygonart=3]/ib:Kante/*">
+                    <xsl:for-each select="ib:Geometrie[ib:GeoObjekttyp='L']/ib:Geometriedaten//ib:Kante/*">
                     <COORD>
                         <C1><xsl:value-of select="ib:Rechtswert"/></C1>
                         <C2><xsl:value-of select="ib:Hochwert"/></C2>
